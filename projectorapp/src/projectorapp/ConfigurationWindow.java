@@ -5,7 +5,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
 /**
- * ProjectorAppWindow
+ * ConfigurationWindow
  * 
  * @author marzin
  * @version 0.1

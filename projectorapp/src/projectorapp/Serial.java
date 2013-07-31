@@ -1,5 +1,7 @@
 package projectorapp;
 
+import jssc.SerialPortList;
+
 /**
  * Serial
  * 
@@ -26,5 +28,10 @@ public class Serial
     public static String[] getStopBits()
     {
         return new String[] {"1", "2"};
+    }
+    
+    public static void getPorts()
+    {
+        System.out.println(SerialPortList.getPortNames());
     }
 }

@@ -4,3 +4,6 @@
 *.jar
 *.war
 *.ear
+/NP1000Test/nbproject/private/
+/NP1000Test/build/
+/NP1000Test/dist/
