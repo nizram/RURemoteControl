@@ -1,6 +1,5 @@
 package projectorapp;
 
-import java.net.Inet4Address;
 import java.net.InetAddress;
 
 /**
@@ -21,6 +20,11 @@ public class Configuration
     private String parity;
     private int stopBits;
     private boolean tecRoom;
+    private String pc;
+    private String laptop;
+    private String dvd;
+    private String vcr;
+    private String doccam;
     
     public Configuration()
     {
@@ -33,6 +37,11 @@ public class Configuration
         parity = "";
         stopBits = 0;
         tecRoom = false;
+        pc = "";
+        laptop = "";
+        dvd = "";
+        vcr = "";
+        doccam = "";
         
         try
         {
@@ -45,7 +54,8 @@ public class Configuration
     }
     
     public Configuration(String n, String t, String ma, String mo, int s, 
-            int db, String p, int sb, boolean te, InetAddress ip)
+            int db, String p, int sb, boolean te, InetAddress ip, String c,
+            String l, String d, String v, String dc)
     {
         title = n;
         type = t;
@@ -57,17 +67,22 @@ public class Configuration
         stopBits = sb;
         tecRoom = te;
         ipAddress = ip;
+        pc = c;
+        laptop = l;
+        dvd = d;
+        vcr = v;
+        doccam = dc;
     }
     
     public String getConfigString()
     {
         StringBuilder x = new StringBuilder();
-        x.append("NAME="+title+"\n");
-        x.append("TYPE="+type+"\n");
-        x.append("MAKE="+make+"\n");
-        x.append("MODEL="+model+"\n");
-        x.append("IPADDRESS="+ipAddress+"\n");
-        x.append("SERIAL="+speed+" "+dataBits+parity+stopBits+"\n\n");
+        x.append("NAME=").append(title).append("\n");
+        x.append("TYPE=").append(type).append("\n");
+        x.append("MAKE=").append(make).append("\n");
+        x.append("MODEL=").append(model).append("\n");
+        x.append("IPADDRESS=").append(ipAddress).append("\n");
+        x.append("SERIAL=").append(speed).append(" ").append(dataBits).append(parity).append(stopBits).append("\n\n");
         
         return x.toString();
     }
@@ -122,6 +137,31 @@ public class Configuration
         return ipAddress;
     }
     
+    public String getPC()
+    {
+        return pc;
+    }
+    
+    public String getLaptop()
+    {
+        return laptop;
+    }
+    
+    public String getDVD()
+    {
+        return dvd;
+    }
+    
+    public String getVCR()
+    {
+        return vcr;
+    }
+    
+    public String getDoccam()
+    {        
+        return doccam;
+    }
+    
     public void setTitle(String n)
     {
         this.title = n;
@@ -170,5 +210,30 @@ public class Configuration
     public void getIpAddress(InetAddress i)
     {
         this.ipAddress = i;
+    }
+    
+    public void setPC(String p)
+    {
+        this.pc = p;
+    }
+    
+    public void setLaptop(String l)
+    {
+        this.laptop = l;
+    }
+    
+    public void setDVD(String d)
+    {
+        this.dvd = d;
+    }
+    
+    public void setVCR(String v)
+    {
+        this.vcr = v;
+    }
+    
+    public void setDoccam(String d)
+    {        
+        this.doccam = d;
     }
 }

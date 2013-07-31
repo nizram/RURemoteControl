@@ -105,8 +105,10 @@ public class CFWriter
         {
             System.err.println(e);
         }
-        Configuration conf = new Configuration("TEST", "Projector", "NEC", "NP1000", 9600, 8, "N", 1, false, ip);
-        Configuration conf2 = new Configuration("TEST2", "Projector", "NEC", "NP1000", 9600, 8, "N", 1, false, ip);
+        Configuration conf = new Configuration("TEST", "Projector", "NEC", "NP1000", 9600, 8, "N", 1, false, ip,
+                                               "PC","LAPTOP","","","");
+        Configuration conf2 = new Configuration("TEST2", "Projector", "NEC", "NP1000", 9600, 8, "N", 1, false, ip,
+                                                "PC","LAPTOP","","","");
         HashMap<String, Configuration> map = new HashMap<String, Configuration>();
         map.put(conf.getTitle(), conf);
         map.put(conf2.getTitle(), conf2);

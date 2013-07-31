@@ -8,9 +8,21 @@ package projectorapp;
  */
 public class ProjectorTypes
 {
-    public static String[] getMakes()
+    public static String[] getMakes(String type)
     {
-        return new String[] {"NEC", "Epson", "Sharp"};
+        //String makes[];
+        if ("Projector".equals(type))
+        {
+            return new String[] {"NEC", "Epson", "Sharp"};
+        }
+        else if ("Television".equals(type))
+        {
+            return new String[] {"Sharp", "NEC", "Samsung"};
+        }
+        else
+        {
+            return new String[] {};
+        }
     }
     
     public static String[] getModels(String make)

@@ -1,5 +1,9 @@
 package projectorapp;
 
+import java.awt.event.ItemEvent;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+
 /**
  * ProjectorAppWindow
  * 
@@ -27,13 +31,7 @@ public class ConfigurationWindow extends javax.swing.JFrame
 
         type_Group = new javax.swing.ButtonGroup();
         connection_Group = new javax.swing.ButtonGroup();
-        config_Panel = new javax.swing.JPanel();
-        config_Label = new javax.swing.JLabel();
-        config_Scroll = new javax.swing.JScrollPane();
-        config_List = new javax.swing.JList();
-        add_Button = new javax.swing.JButton();
-        remove_Button = new javax.swing.JButton();
-        reload_Button = new javax.swing.JButton();
+        n_Group = new javax.swing.ButtonGroup();
         info_Panel = new javax.swing.JPanel();
         info_Label = new javax.swing.JLabel();
         name_Label = new javax.swing.JLabel();
@@ -60,83 +58,27 @@ public class ConfigurationWindow extends javax.swing.JFrame
         stopBits_ComboBox = new javax.swing.JComboBox();
         connection_Button1 = new javax.swing.JRadioButton();
         connection_Button2 = new javax.swing.JRadioButton();
-        tec_Panel = new javax.swing.JPanel();
         tec_Label = new javax.swing.JLabel();
         tec_CheckBox = new javax.swing.JCheckBox();
+        jSeparator1 = new javax.swing.JSeparator();
+        jPanel1 = new javax.swing.JPanel();
+        connection_Label = new javax.swing.JLabel();
+        pc_CheckBox = new javax.swing.JCheckBox();
+        laptop_CheckBox = new javax.swing.JCheckBox();
+        dvd_CheckBox = new javax.swing.JCheckBox();
+        vcr_CheckBox = new javax.swing.JCheckBox();
+        doccam_CheckBox = new javax.swing.JCheckBox();
+        pc_ComboBox = new javax.swing.JComboBox();
+        laptop_ComboBox = new javax.swing.JComboBox();
+        dvd_ComboBox = new javax.swing.JComboBox();
+        vcr_ComboBox = new javax.swing.JComboBox();
+        doccam_ComboBox = new javax.swing.JComboBox();
         button_Panel = new javax.swing.JPanel();
-        save_Button = new javax.swing.JButton();
         cancel_Button = new javax.swing.JButton();
         run_Button = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Configuration Editor");
-
-        config_Label.setText("Configuration:");
-
-        config_List.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        config_List.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                config_ListValueChanged(evt);
-            }
-        });
-        config_Scroll.setViewportView(config_List);
-        config_List.setSelectedIndex(0);
-
-        add_Button.setText("+");
-        add_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                add_ButtonActionPerformed(evt);
-            }
-        });
-
-        remove_Button.setText("-");
-        remove_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                remove_ButtonActionPerformed(evt);
-            }
-        });
-
-        reload_Button.setText("ReRead");
-
-        org.jdesktop.layout.GroupLayout config_PanelLayout = new org.jdesktop.layout.GroupLayout(config_Panel);
-        config_Panel.setLayout(config_PanelLayout);
-        config_PanelLayout.setHorizontalGroup(
-            config_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(config_PanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(config_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(config_Scroll)
-                    .add(config_PanelLayout.createSequentialGroup()
-                        .add(add_Button, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 41, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(remove_Button, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 40, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 50, Short.MAX_VALUE)
-                        .add(reload_Button))
-                    .add(config_PanelLayout.createSequentialGroup()
-                        .add(config_Label)
-                        .add(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        config_PanelLayout.setVerticalGroup(
-            config_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(config_PanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(config_Label)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(config_Scroll, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 319, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(config_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(remove_Button, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 30, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(reload_Button)
-                    .add(add_Button, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        reload_Button.setEnabled(false);
 
         info_Label.setText("Details:");
 
@@ -152,11 +94,20 @@ public class ConfigurationWindow extends javax.swing.JFrame
 
         make_Label.setText("Make:");
 
-        make_ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        make_ComboBox.setModel(new javax.swing.DefaultComboBoxModel(projectorapp.ProjectorTypes.getMakes("Projector")));
+        make_ComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                make_ComboBoxActionPerformed(evt);
+            }
+        });
 
         model_Label.setText("Model:");
 
-        model_ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        model_ComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                model_ComboBoxActionPerformed(evt);
+            }
+        });
 
         settings_Label.setText("Connection Settings:");
 
@@ -201,6 +152,10 @@ public class ConfigurationWindow extends javax.swing.JFrame
             }
         });
 
+        tec_Label.setText("TEC Classroom:");
+
+        tec_CheckBox.setText(" ");
+
         org.jdesktop.layout.GroupLayout info_PanelLayout = new org.jdesktop.layout.GroupLayout(info_Panel);
         info_Panel.setLayout(info_PanelLayout);
         info_PanelLayout.setHorizontalGroup(
@@ -238,10 +193,6 @@ public class ConfigurationWindow extends javax.swing.JFrame
                                                     .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                                                     .add(model_ComboBox, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .add(info_PanelLayout.createSequentialGroup()
-                                                    .add(name_Label)
-                                                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                                    .add(name_TextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 127, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                                .add(info_PanelLayout.createSequentialGroup()
                                                     .add(type_Label)
                                                     .add(18, 18, 18)
                                                     .add(info_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -250,10 +201,18 @@ public class ConfigurationWindow extends javax.swing.JFrame
                                                 .add(info_PanelLayout.createSequentialGroup()
                                                     .add(make_Label)
                                                     .add(18, 18, 18)
-                                                    .add(make_ComboBox, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                    .add(make_ComboBox, 0, 124, Short.MAX_VALUE)))
                                             .add(settings_Label)
                                             .add(connection_Button1)
-                                            .add(connection_Button2))))))
+                                            .add(connection_Button2)
+                                            .add(info_PanelLayout.createSequentialGroup()
+                                                .add(name_Label)
+                                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                                .add(name_TextField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 204, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                            .add(info_PanelLayout.createSequentialGroup()
+                                                .add(tec_Label)
+                                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                                .add(tec_CheckBox)))))))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(ip_TextField4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(info_PanelLayout.createSequentialGroup()
@@ -312,7 +271,11 @@ public class ConfigurationWindow extends javax.swing.JFrame
                         .add(dataBits_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(parity_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(stopBits_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(info_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(tec_Label)
+                    .add(tec_CheckBox))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         //Disable the Serial ComboBox's
@@ -321,37 +284,48 @@ public class ConfigurationWindow extends javax.swing.JFrame
         parity_ComboBox.setEnabled(false);
         stopBits_ComboBox.setEnabled(false);
 
-        tec_Label.setText("TEC Classroom:");
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        tec_CheckBox.setText(" ");
+        connection_Label.setText("Connection Info:");
 
-        org.jdesktop.layout.GroupLayout tec_PanelLayout = new org.jdesktop.layout.GroupLayout(tec_Panel);
-        tec_Panel.setLayout(tec_PanelLayout);
-        tec_PanelLayout.setHorizontalGroup(
-            tec_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(tec_PanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(tec_Label)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(tec_CheckBox)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        tec_PanelLayout.setVerticalGroup(
-            tec_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(tec_PanelLayout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(tec_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(tec_Label)
-                    .add(tec_CheckBox))
-                .addContainerGap())
-        );
+        pc_CheckBox.setSelected(true);
+        pc_CheckBox.setText("PC");
+        pc_CheckBox.setEnabled(false);
 
-        save_Button.setText("Save");
-        save_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                save_ButtonActionPerformed(evt);
+        laptop_CheckBox.setSelected(true);
+        laptop_CheckBox.setText("Laptop");
+        laptop_CheckBox.setEnabled(false);
+
+        dvd_CheckBox.setText("DVD Player");
+        dvd_CheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                dvd_CheckBoxItemStateChanged(evt);
             }
         });
+
+        vcr_CheckBox.setText("VCR");
+        vcr_CheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                vcr_CheckBoxItemStateChanged(evt);
+            }
+        });
+
+        doccam_CheckBox.setText("Document Camera");
+        doccam_CheckBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                doccam_CheckBoxItemStateChanged(evt);
+            }
+        });
+
+        pc_ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        laptop_ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        dvd_ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        vcr_ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        doccam_ComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         cancel_Button.setText("Cancel");
         cancel_Button.addActionListener(new java.awt.event.ActionListener() {
@@ -372,26 +346,82 @@ public class ConfigurationWindow extends javax.swing.JFrame
         button_PanelLayout.setHorizontalGroup(
             button_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(button_PanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .add(button_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(button_PanelLayout.createSequentialGroup()
-                        .add(save_Button, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 81, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(33, 33, 33)
-                        .add(cancel_Button)
-                        .add(0, 0, Short.MAX_VALUE))
-                    .add(run_Button, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(cancel_Button, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 96, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(run_Button, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 98, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
         );
         button_PanelLayout.setVerticalGroup(
             button_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(button_PanelLayout.createSequentialGroup()
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(button_PanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(save_Button)
-                    .add(cancel_Button))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(run_Button, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 37, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(run_Button)
+                    .add(cancel_Button, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 29, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(connection_Label)
+                .add(0, 0, Short.MAX_VALUE))
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(doccam_CheckBox)
+                    .add(vcr_CheckBox)
+                    .add(dvd_CheckBox)
+                    .add(pc_CheckBox)
+                    .add(laptop_CheckBox))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(laptop_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 200, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(pc_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 200, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(dvd_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 200, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(vcr_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 200, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(doccam_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 200, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(button_Panel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(connection_Label)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(pc_CheckBox)
+                    .add(pc_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(laptop_CheckBox)
+                    .add(laptop_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(dvd_CheckBox)
+                    .add(dvd_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(vcr_CheckBox)
+                    .add(vcr_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(doccam_CheckBox)
+                    .add(doccam_ComboBox, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(button_Panel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        dvd_ComboBox.setEnabled(false);
+        vcr_ComboBox.setEnabled(false);
+        doccam_ComboBox.setEnabled(false);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -399,43 +429,26 @@ public class ConfigurationWindow extends javax.swing.JFrame
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(config_Panel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .add(6, 6, 6)
-                        .add(tec_Panel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(73, 73, 73)
-                        .add(button_Panel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .add(info_Panel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(info_Panel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jSeparator1)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(config_Panel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(layout.createSequentialGroup()
-                        .add(info_Panel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(tec_Panel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(button_Panel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(16, 16, 16)))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(info_Panel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void add_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_ButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_add_ButtonActionPerformed
-
-    private void remove_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_remove_ButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_remove_ButtonActionPerformed
 
     private void connection_Button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connection_Button1ActionPerformed
         //Disable the Serial ComboBox's
@@ -471,21 +484,67 @@ public class ConfigurationWindow extends javax.swing.JFrame
         stopBits_ComboBox.setEnabled(true);
     }//GEN-LAST:event_connection_Button2ActionPerformed
 
-    private void save_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_ButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_save_ButtonActionPerformed
-
     private void cancel_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_ButtonActionPerformed
         // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_cancel_ButtonActionPerformed
 
     private void run_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_run_ButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_run_ButtonActionPerformed
 
-    private void config_ListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_config_ListValueChanged
+    private void dvd_CheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_dvd_CheckBoxItemStateChanged
+        // Enable the jComboBox when the jCheckBox is selected
+        if(evt.getStateChange() == ItemEvent.SELECTED)
+        {
+            dvd_ComboBox.setEnabled(true);
+        }
+        // Disable the jComboBox when the jCheckBox is deselected
+        else if(evt.getStateChange() == ItemEvent.DESELECTED)
+        {
+            dvd_ComboBox.setEnabled(false);
+        }
+    }//GEN-LAST:event_dvd_CheckBoxItemStateChanged
+
+    private void vcr_CheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_vcr_CheckBoxItemStateChanged
+        // Enable the jComboBox when the jCheckBox is selected
+        if(evt.getStateChange() == ItemEvent.SELECTED)
+        {
+            vcr_ComboBox.setEnabled(true);
+        }
+        // Disable the jComboBox when the jCheckBox is deselected
+        else if(evt.getStateChange() == ItemEvent.DESELECTED)
+        {
+            vcr_ComboBox.setEnabled(false);
+        }
+    }//GEN-LAST:event_vcr_CheckBoxItemStateChanged
+
+    private void doccam_CheckBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_doccam_CheckBoxItemStateChanged
+        // Enable the jComboBox when the jCheckBox is selected
+        if(evt.getStateChange() == ItemEvent.SELECTED)
+        {
+            doccam_ComboBox.setEnabled(true);
+        }
+        // Disable the jComboBox when the jCheckBox is deselected
+        else if(evt.getStateChange() == ItemEvent.DESELECTED)
+        {
+            doccam_ComboBox.setEnabled(false);
+        }
+    }//GEN-LAST:event_doccam_CheckBoxItemStateChanged
+
+    private void make_ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_make_ComboBoxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_config_ListValueChanged
+        String[] models;
+        JComboBox cb = (JComboBox)evt.getSource();
+        String make = (String)cb.getSelectedItem();
+        //System.out.println("Make: " + make);
+        models = ProjectorTypes.getModels(make);
+        model_ComboBox.setModel(new DefaultComboBoxModel(models));
+    }//GEN-LAST:event_make_ComboBoxActionPerformed
+
+    private void model_ComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_model_ComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_model_ComboBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -522,47 +581,52 @@ public class ConfigurationWindow extends javax.swing.JFrame
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton add_Button;
     private javax.swing.JPanel button_Panel;
     private javax.swing.JButton cancel_Button;
-    private javax.swing.JLabel config_Label;
-    private javax.swing.JList config_List;
-    private javax.swing.JPanel config_Panel;
-    private javax.swing.JScrollPane config_Scroll;
     private javax.swing.JRadioButton connection_Button1;
     private javax.swing.JRadioButton connection_Button2;
     private javax.swing.ButtonGroup connection_Group;
+    private javax.swing.JLabel connection_Label;
     private javax.swing.JComboBox dataBits_ComboBox;
+    private javax.swing.JCheckBox doccam_CheckBox;
+    private javax.swing.JComboBox doccam_ComboBox;
     private javax.swing.JLabel dot_Label1;
     private javax.swing.JLabel dot_Label2;
     private javax.swing.JLabel dot_Label3;
+    private javax.swing.JCheckBox dvd_CheckBox;
+    private javax.swing.JComboBox dvd_ComboBox;
     private javax.swing.JLabel info_Label;
     private javax.swing.JPanel info_Panel;
     private javax.swing.JTextField ip_TextField1;
     private javax.swing.JTextField ip_TextField2;
     private javax.swing.JTextField ip_TextField3;
     private javax.swing.JTextField ip_TextField4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JCheckBox laptop_CheckBox;
+    private javax.swing.JComboBox laptop_ComboBox;
     private javax.swing.JComboBox make_ComboBox;
     private javax.swing.JLabel make_Label;
     private javax.swing.JComboBox model_ComboBox;
     private javax.swing.JLabel model_Label;
+    private javax.swing.ButtonGroup n_Group;
     private javax.swing.JLabel name_Label;
     private javax.swing.JTextField name_TextField;
     private javax.swing.JLabel or_Label;
     private javax.swing.JComboBox parity_ComboBox;
-    private javax.swing.JButton reload_Button;
-    private javax.swing.JButton remove_Button;
+    private javax.swing.JCheckBox pc_CheckBox;
+    private javax.swing.JComboBox pc_ComboBox;
     private javax.swing.JButton run_Button;
-    private javax.swing.JButton save_Button;
     private javax.swing.JLabel settings_Label;
     private javax.swing.JComboBox speed_ComboBox;
     private javax.swing.JComboBox stopBits_ComboBox;
     private javax.swing.JCheckBox tec_CheckBox;
     private javax.swing.JLabel tec_Label;
-    private javax.swing.JPanel tec_Panel;
     private javax.swing.JRadioButton type_Button1;
     private javax.swing.JRadioButton type_Button2;
     private javax.swing.ButtonGroup type_Group;
     private javax.swing.JLabel type_Label;
+    private javax.swing.JCheckBox vcr_CheckBox;
+    private javax.swing.JComboBox vcr_ComboBox;
     // End of variables declaration//GEN-END:variables
 }

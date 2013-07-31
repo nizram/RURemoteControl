@@ -1,0 +1,2372 @@
+======================================================================
+ Control Commands for NEC Projector HT410,HT510,LT180,LT25,LT30,LT35,
+                                    NP40,NP50,NP60,
+                                    NP4000,NP4001,NP4100,NP4100W
+                                    NP41,NP61,NP52,NP62
+                                    NP43,NP53,NP63,NP54,NP64
+                                    NP110,NP115,NP210,NP215,NP216
+                                    NP-U300X,NP-U250X,NP-U310W,NP-U260W
+                                    NP-V300X,NP-V260X,NP-V230X,NP-V260,NP-V230
+                                                     series  Rev1.0.13b
+
+ Copyright (C) NEC Display Solutions, Ltd. 2004 - 2011
+----------------------------------------------------------------------
+ Updated on March 10, 2011
+----------------------------------------------------------------------
+ This file contains information about NEC projector control commands.
+
+ Model Name
+ HT10   : HT410/HT510
+ LT10   : LT180
+ LT30s  : LT25/LT30/LT35
+ NP60s  : NP40/NP50/NP60
+ NP61s  : NP41/NP61/NP52/NP62
+ NP64s  : NP43/NP53/NP63/NP54/NP64
+ NP4000s: NP4000/NP4001/NP4100/NP4100W
+ NP215s : NP110/NP115/NP210/NP215/NP216
+ U300   : NP-U300X/U250X/U310W/U260W
+ V300   : NP-V300X/V260X/V230X/V260/V230
+
+======================================================================
+
+ Contents
+  1. Projector Control
+  2. Interface Conditions
+  3. List of Commands
+  4. Command Descriptions
+  5. Response
+  6. Table of Response Error Codes
+
+
+======================================================================
+ 1. Projector Control
+----------------------------------------------------------------------
+
+NEC projectors make use of control commands that control the 
+functions of the projector via connection with a personal computer or 
+another device.
+
+
+======================================================================
+ 2. Interface Conditions
+----------------------------------------------------------------------
+
+Serial connection
+----------------------------------------------------------------------
+The communications method conforms to the RS-232C standard.
+
+    Baud rate:           38400 bps
+    Data length:         8 bits
+    Parity bit:          No parity
+    Stop bits:           1 bit
+    Communications mode: Full duplex
+
+The control connector is described below.
+
+[HT10/LT10/LT30s/NP60s/NP61s/NP64s]
+
+The PC CONTROL connector is a mini DIN 8-pin connector.
+
+    1  To TxD of PC
+    2
+    3
+    4  To GND of PC
+    5
+    6
+    7  To RxD of PC
+    8
+
+    * 2, 3, 5, 6, and 8 are used inside the projector.
+
+
+[NP4000s/NP215s/U300/V300]
+
+The PC CONTROL connector is a D-SUB 9-pin connector.
+
+    1
+    2  To TxD of PC
+    3  To RxD of PC
+    4
+    5  To GND of PC
+    6
+    7  To CTS of PC
+    8  To RTS of PC
+    9
+
+
+LAN connection (NP4000s/NP215s/U300/V300)
+----------------------------------------------------------------------
+[ Wired LAN port ]
+
+LAN interface
+   Communication speed : Auto setting (10/100Mbps)
+   Certified standard : IEEE802.3 (10BASE-T)
+                        IEEE802.3u (100BASE-TX, Auto-Negotiation)
+
+A LAN connector (8 male RJ-45 connector)
+    1  TD+	Transmit data (+)
+    2  TD-	Transmit data (-)
+    3  RD+	Receive data (+)
+    4		Not used
+    5		Not used
+    6  RD-	Receive data (-)
+    7		Not used
+    8		Not used
+
+
+[Port Number]
+
+The TCP port number used is "7142".
+
+
+======================================================================
+ 3. List of Commands
+----------------------------------------------------------------------
+
+ * Example for command
+----------------------------------------------------------------------
+ Command name                       Example
+----------------------------------------------------------------------
+ 006. RUNNING SENSE                   00H 81H 00H 00H 00H 81H
+ 007. COMMON DATA REQUEST             00H C0H 00H 00H 00H C0H
+ 009. ERROR STATUS REQUEST            00H 88H 00H 00H 00H 88H
+ 015. POWER ON                        02H 00H 00H 00H 00H 02H
+ 016. POWER OFF                       02H 01H 00H 00H 00H 03H
+ 018. INPUT SW CHANGE                 02H 03H 00H 00H 02H <DATA> CKS
+ 020. PICTURE MUTE ON                 02H 10H 00H 00H 00H 12H
+ 021. PICTURE MUTE OFF                02H 11H 00H 00H 00H 13H
+ 022. SOUND MUTE ON                   02H 12H 00H 00H 00H 14H
+ 023. SOUND MUTE OFF                  02H 13H 00H 00H 00H 15H
+ 024. ONSCREEN MUTE ON                02H 14H 00H 00H 00H 16H
+ 025. ONSCREEN MUTE OFF               02H 15H 00H 00H 00H 17H
+ 030-1. PICTURE ADJUST                03H 10H 00H 00H 05H <DATA> CKS
+ 030-2. VOLUME ADJUST                 03H 10H 00H 00H 05H 05H <DATA> CKS
+ 030-8. KEYSTONE ADJUST               03H 10H 00H 00H 05H 15H <DATA> CKS
+ 030-12. IMAGE MODE ADJUST            03H 10H 00H 00H 05H <DATA> CKS
+ 037. INFORMATION REQUEST             03H 8AH 00H 00H 00H 8DH
+ 037-1. LAMP INFORMATION REQUEST      03H 8CH 00H 00H 00H 8FH
+ 037-2. LAMP INFORMATION REQUEST 2    03H 94H 00H 00H 00H 97H
+ 037-4. LAMP INFORMATION REQUEST 3    03H 96H 00H 00H 02H <DATA> CKS
+ 037-5. TEMP INFORMATION REQUEST      03H 99H 00H 00H 01H <DATA> CKS
+ 037-7. LAMP INFORMATION REQUEST 4    03H 9BH 00H 00H 03H <DATA> CKS
+ 050. REMOTE KEY CODE                 02H 0FH 00H 00H 02H <DATA> CKS
+ 060. GAIN PARAMETER REQUEST 2        03H 04H 00H 00H 03H <DATA> CKS
+ 077. MUTE CONTROL                    02H 1AH 00H 00H 02H <DATA> CKS
+ 078-1. SETTING REQUEST               00H 85H 00H 00H 01H 00H CKS
+ 078-2. RUNNING STATUS REQUEST        00H 85H 00H 00H 01H 01H CKS
+ 078-3. INPUT STATUS REQUEST          00H 85H 00H 00H 01H 02H CKS
+ 078-4. MUTE STATUS REQUEST           00H 85H 00H 00H 01H 03H CKS
+ 078-5. MODEL NAME REQUEST            00H 85H 00H 00H 01H 04H CKS
+ 078-6. COVER STATUS REQUEST          00H 85H 00H 00H 01H 05H CKS
+ 079. FREEZE CONTROL                  01H 98H 00H 00H 01H <DATA> CKS
+ 084. INFORMATION STRING REQUEST      00H D0H 00H 00H 03H 00H 00H 00H CKS
+ 097-8. LAMP MODE REQUEST             03H B0H 00H 00H 01H 07H BBH
+ 098-8. LAMP MODE SET                 03H B1H 00H 00H 02H 07H DATA CKS
+ 098-11. ORIENTATION SET              03H B1H 00H 00H 02H 0AH <DATA> CKS
+ 098-24. POWER MANAGEMENT SET         03H B1H 00H 00H 02H 17H DATA CKS
+ 110. AUTO FUNCTIONS EXECUTE          03H B6H 00H 00H 01H <DATA> CKS
+ 305-1. BASE MODEL TYPE REQUEST       00H BFH 00H 00H 01H 00H CKS
+ 305-2. VERSION INFORMATION REQUEST   00H BFH 00H 00H 02H 01H <DATA> CKS
+ 305-3. PROJECTOR INFORMATION REQUEST 00H BFH 00H 00H 01H 02H CKS
+
+
+ * Availability by Model
+----------------------------------------------------------------------
+ Model No.
+-------------------------
+ 01 : HT410/510
+ 02 : LT180
+ 03 : LT25/30/35
+ 04 : NP40/50/60
+ 05 : NP4000/4001
+ 06 : NP41/61/52/62
+ 07 : NP4100/4100W
+ 08 : NP110/115/210/215/216
+ 09 : NP43/53/63/54/64
+ 10 : NP-U300X/U250X/U310W/U260W
+ 11 : NP-V300X/V260X/V230X/V260/V230
+
+ Meaning of Symbol
+-----------------------------------------------------
+ * : Supported
+ ! : Is available depending on the model's version
+ - : Not supported
+
+                                      Availability by Model
+-------------------------------------------------------------------------
+  Command Name                        01 02 03 04 05 06 07 08 09 10 11
+----------------------------------------------------------------------------
+ 006. RUNNING SENSE                   -  -  -  -  *  *  *  *  *  *  *
+ 007. COMMON DATA REQUEST             -  -  -  -  *  *  *  *  *  *  *
+ 009. ERROR STATUS REQUEST            *  *  *  *  *  *  *  *  *  *  *
+ 015. POWER ON                        *  *  *  *  *  *  *  *  *  *  *
+ 016. POWER OFF                       *  *  *  *  *  *  *  *  *  *  *
+ 018. INPUT SW CHANGE                 *  *  *  *  *  *  *  *  *  *  *
+ 020. PICTURE MUTE ON                 *  *  *  *  *  *  *  *  *  *  *
+ 021. PICTURE MUTE OFF                *  *  *  *  *  *  *  *  *  *  *
+ 022. SOUND MUTE ON                   *  *  *  -  *  *  *  *  *  *  *
+ 023. SOUND MUTE OFF                  *  *  *  -  *  *  *  *  *  *  *
+ 024. ONSCREEN MUTE ON                *  *  *  *  *  *  *  *  *  *  *
+ 025. ONSCREEN MUTE OFF               *  *  *  *  *  *  *  *  *  *  *
+ 030-1. PICTURE ADJUST
+          Brightness                  -  -  -  -  *  *  *  *  *  *  *
+          Contrast                    -  -  -  -  *  *  *  *  *  *  *
+          Color                       -  -  -  -  *  *  *  *  *  *  *
+          Hue                         -  -  -  -  *  *  *  *  *  *  *
+          Sharpness                   -  -  -  -  *  *  *  *  *  *  *
+ 030-2. VOLUME ADJUST
+          Volume                      -  -  *  -  *  *  *  *  *  *  *
+          Bass                        -  -  -  -  -  -  -  -  -  -  -
+          Treble                      -  -  -  -  -  -  -  -  -  -  -
+          Balance                     -  -  -  -  -  -  -  -  -  -  -
+ 030-8. KEYSTONE ADJUST
+          H Keystone                  -  -  -  -  !  -  *  -  -  -  -
+          V Keystone                  -  -  -  *  !  *  *  *  *  *  *
+ 030-12. IMAGE MODE ADJUST
+          Aspect Ratio Input Signal   -  -  -  -  *  !  *  *  *  *  *
+ 037. INFORMATION REQUEST             *  *  *  *  *  *  *  *  *  *  *
+ 037-1. LAMP INFORMATION REQUEST      *  *  *  -  -  *  -  *  *  *  *
+ 037-2. LAMP INFORMATION REQUEST 2    -  -  -  -  -  *  -  *  *  *  *
+ 037-4. LAMP INFORMATION REQUEST 3    -  -  -  *  *  *  *  *  *  *  *
+ 037-5. TEMP INFORMATION REQUEST      -  -  -  *  -  *  -  *  *  *  *
+ 037-7. LAMP INFORMATION REQUEST 4    -  -  -  -  -  -  -  *  *  -  *
+ 050. REMOTE KEY CODE                 *  *  *  *  *  *  *  *  *  *  *
+ 060. GAIN PARAMETER REQUEST 2        -  -  -  -  *  *  *  *  *  *  *
+ 077. MUTE CONTROL                    *  *  *  *  *  *  *  *  *  *  *
+ 078-1. SETTING REQUEST               -  -  -  -  *  *  *  *  *  *  *
+ 078-2. RUNNING STATUS REQUEST        -  -  -  -  *  *  *  *  *  *  *
+ 078-3. INPUT STATUS REQUEST          -  -  -  -  *  *  *  *  *  *  *
+ 078-4. MUTE STATUS REQUEST           -  -  -  -  *  *  *  *  *  *  *
+ 078-5. MODEL NAME REQUEST            -  -  -  -  *  *  *  *  *  *  *
+ 078-6. COVER STATUS REQUEST          -  -  -  -  -  -  -  -  *  -  -
+ 079. FREEZE CONTROL
+          Freeze start                -  -  -  *  *  *  *  *  *  *  *
+          Freeze cancel               -  -  -  *  *  *  *  *  *  *  *
+ 084. INFORMATION STRING REQUEST      -  -  -  -  -  *  -  *  *  *  *
+ 097-8. LAMP MODE REQUEST             -  -  -  -  !  *  *  *  *  *  *
+ 098-8. LAMP MODE SET                 -  -  -  *  !  *  *  *  *  *  *
+ 098-11. ORIENTATION SET              -  -  -  *  *  *  *  *  *  *  *
+ 098-24. POWER MANAGEMENT SET         -  -  -  -  !  !  *  *  *  *  *
+ 098-148. KEYSTONE SELECT SET         -  -  -  *  -  *  -  -  *  -  -
+ 110. AUTO FUNCTIONS EXECUTE          -  -  !  *  -  *  -  -  *  -  -
+ 305-1. BASE MODEL TYPE REQUEST       *  *  *  *  *  *  *  *  *  *  *
+ 305-2. VERSION INFORMATION REQUEST   -  -  -  *  -  *  -  *  *  -  *
+ 305-3. PROJECTOR INFORMATION REQUEST *  *  *  *  *  *  *  *  *  *  *
+
+
+(!)
+  LT30   : firmware version. 1.03 or later
+  NP4000 : firmware version. 1.04 or later
+  NP4001 : firmware version. 1.01 or later
+  NP61s  : firmware version. 1.02 or later
+
+
+
+======================================================================
+ 4. Command Descriptions
+----------------------------------------------------------------------
+Precautions with Inscriptions:
+
+(*1) Control ID
+This refers to the Control ID.
+
+(*2) Model code : "xxH" inscription
+This will differ depending on the projector.
+   In case of HT10, LT10, LT30s, NP60s series  D0H
+   In case of NP61s, NP64s, NP215s, V300   20H
+   In case of NP4000s, U300 series   80H
+
+(*3) Checksum : "CKS" inscription
+This is the value of the lower 8 bits of the results calculated in 
+byte units from all the of the data up to the immediately preceding 
+data.
+   Example)
+   20H  81H  01H  60H  01H  00H  03H
+   +    +    +    +    +    +  = CKS
+
+(*4) Response error number
+This is the value of the error number at the time of an error.
+See "NAK" of "6. Table of Response Error Codes".
+
+(*5) Term "RGB" and "COMPUTER"
+On the HT10 series, the term "RGB connector" has been changed 
+to "COMPUTER".
+
+Supplement:
+* These specifications include response for items that the HT10s do not support.
+
+
+
+ 006. RUNNING SENSE
+**********************************************************************
+Function:
+This command acquires the operation mode of the projector.
+
+Command:
+   00H  81H  00H  00H  00H  81H
+
+Response: At the time of a success
+   20H  81H  01H  xxH  01H  DATA01  CKS
+             (*1) (*2)              (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Status of operation
+                 Bit 7 : Power On/Off processing
+                       0 = No execution(Normal condition)
+                       1 = During execution
+
+                 Bit 6 : Selecting signal processing
+                       0 = No execution(Normal condition)
+                       1 = During execution
+
+                 Bit 5 : Cooling processing
+                       0 = No execution(Normal condition)
+                       1 = During execution
+
+                 Bit 4 : External control mode
+                       0 = OFF
+                       1 = ON
+
+                 Bit 3 : No power-off period
+                       0 = Power-off possible (Normal condition)
+                       1 = Power-off Impossible
+
+                 Bit 2 : Reserved
+
+                 Bit 1 : Projector status
+                       0 = Idling
+                       1 = Power On
+                 Bit 0 : Reserved
+
+Response: At the time of a failure
+   A0H  81H  01H  xxH  02H  DATA1H  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 007. COMMON DATA REQUEST
+**********************************************************************
+Function:
+This command acquisition of the detailed conditions of the projector.
+
+Command:
+   00H  C0H  00H  00H  00H  C0H
+
+Response: At the time of a success
+   20H  C0H  01H  xxH  80H  DATA01 .. DATA128  CKS
+             (*1) (*2)                         (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Projector type
+                 See DATA70...71
+
+   DATA02        Control ID
+                 1 .. 254
+
+   DATA03        Reserved
+
+   DATA04        Projector status
+                 00H : Idling
+                 01H : Power On
+
+   DATA05        Cooling processing
+                 00H : No execution(Normal condition)
+                 01H : During execution
+
+   DATA06        Indication signal number( Entry list number - 1 )
+                 0 .. 199
+
+   DATA07        Type 1 of input terminal to be selected (!)
+                 01H : 1
+                 02H : 2
+                 03H : 3
+                 04H : 4
+                 05H : 5
+
+   DATA08        Type 2 of input terminal to be selected (!)(!!)
+                 01H : Computer
+                 02H : VIDEO
+                 03H : S-VIDEO
+                 04H : COMPONENT
+                 05H : Reserved
+                 06H : Computer(DVI/HDMI)
+                 07H : VIEWER
+                 08H : SLOT1
+                 09H : SLOT2
+
+   DATA09        Indication signal type
+            * Valid only when Type 2 of input terminal is 02H or 03H
+                 x0H : NTSC3.58
+                 x1H : NTSC4.43
+                 x2H : PAL
+                 x3H : PAL60
+                 x4H : SECAM
+                 x5H : B/W60
+                 x6H : B/W50
+                 x7H : PALNM
+                 x8H : NTSC3.58 LBX
+                 x9H : NTSC3.58 SQZ
+                 xDH : NTSC
+                 xEH : PAL-M
+                 xFH : PAL-N
+                 * x: undefined
+
+   DATA10 .. 12  Reserved ( undefined )
+
+   DATA13 .. 20  Horizontal frequency of the indication signal(string)
+                   ( "000.00" kHz + NULL(0)+ NULL(0) )
+
+   DATA21 .. 28  Vertical frequency of the indication signal(string)
+                   ( "000.00" Hz  + NULL(0)+ NULL(0) )
+
+   DATA29        Picture mute
+                 00H : OFF
+                 01H : ON
+
+   DATA30        Sound mute
+                 00H : OFF
+                 01H : ON
+
+   DATA31 .. 32  Reserved
+
+   DATA33        Test pattern display 1
+                 00H : No display(Normal condition)
+                 00H Other : Displaying(Pattern ID)
+                   +------------+-----------------+---------+-------+--------+
+                   | Pattern ID |  Pattern name   | NP4000s | NP61s | NP215s |
+                   |            |                 |         | NP64s | V300   |
+                   +------------+-----------------+---------+-------+--------+
+                   |        02H |  Cross Hatch    |    *    |   *   |   *    |
+                   |        03H |  Gray Bars      |    x    |   x   |   x    |
+                   |        04H |  Raster(0%)     |    *    |   *   |   *    |
+                   |        05H |  Raster(25%)    |    *    |   x   |   *    |
+                   |        06H |  Raster(50%)    |    *    |   x   |   *    |
+                   |        07H |  Raster(100%)   |    *    |   *   |   *    |
+                   |        08H |  Focus          |    x    |   x   |   x    |
+                   |        09H |  Raster Blue    |    *    |   *   |   *    |
+                   |        0AH |  Gray Raster 30 |    *    |   *   |   *    |
+                   |        17H |  Gray Raster 10 |    *    |   *   |   *    |
+                   |        18H |  RAMP WBGR      |    x    |   *   |   *    |
+                   |        19H |  Blue Raster 60 |    *    |   *   |   *    |
+                   |        1DH |  Cross Hatch 3  |    x    |   x   |   x    |
+                   +------------+-----------------+---------+-------+--------+
+                    * : Supported
+                    x : Not supported
+
+   DATA34        Test pattern display 2
+                 FFH : No display(Normal condition)
+                 FFH Other : Displaying
+                 Bit 2 : BLUE pattern
+                       0 = OFF
+                       1 = ON
+                 Bit 1 : GREEN pattern
+                       0 = OFF
+                       1 = ON
+                 Bit 0 : RED pattern
+                       0 = OFF
+                       1 = ON
+
+   DATA35 .. 50  Reserved
+
+   DATA51 .. 65  User registration name ( 14 characters + NULL )
+
+   DATA66        Forced On-screen mute
+                 00H : OFF
+                 01H : ON
+
+   DATA67        On-screen display
+                 00H : No display
+                 01H : Displaying
+
+   DATA68        Selecting signal processing
+                 00H : No execution(Normal condition)
+                 01H : During execution
+
+   DATA69        Status of operation
+                 00H : Idling
+                 04H : Power On
+                 05H : Cooling
+                 06H : Idling(Error occurrence)
+                 Other than above : (nondisclosure)
+                 internal use of code during a state transition period
+
+   DATA70 .. 71  Projector type
+                 +--------+--------+--------+-------------------+
+                 | DATA01 | DATA70 | DATA71 |                   |
+                 +--------+--------+--------+-------------------+
+                 |    08H |    00H |    07H | NP4000            |
+                 |    08H |    00H |    10H | NP4100            |
+                 |    08H |    01H |    10H | NP4100W           |
+                 |    11H |    00H |    00H | NP41/61           |
+                 |    11H |    01H |    00H | NP52/62           |
+                 |    11H |    00H |    12H | NP64              |
+                 |    11H |    01H |    12H | NP54              |
+                 |    11H |    02H |    12H | NP63              |
+                 |    11H |    03H |    12H | NP43              |
+                 |    11H |    04H |    12H | NP53              |
+                 |    11H |    00H |    11H | NP215             |
+                 |    11H |    01H |    11H | NP210             |
+                 |    11H |    02H |    11H | NP115             |
+                 |    11H |    03H |    11H | NP110             |
+                 |    11H |    04H |    11H | NP216             |
+                 |    14H |    01H |    10H | NP-U250X          |
+                 |    14H |    02H |    10H | NP-U300X          |
+                 |    14H |    03H |    10H | NP-U260W          |
+                 |    14H |    04H |    10H | NP-U310W          |
+                 |    16H |    00H |    10H | NP-V300X          |
+                 |    16H |    01H |    10H | NP-V260X          |
+                 |    16H |    02H |    10H | NP-V230X          |
+                 |    16H |    03H |    10H | NP-V260           |
+                 |    16H |    04H |    10H | NP-V230           |
+                 +--------+--------+--------+-------------------+
+
+   DATA72        PC Card insertion
+                 00H : Not inserted
+                 01H : Inserted
+
+   DATA73        USB Mouse connection
+                 00H : Not connected
+                 01H : Connected
+
+   DATA74        Entry list type
+                 01H : Default
+                 02H : User
+
+   DATA75 .. 82  Reserved
+
+   DATA83        On-screen mute
+                 00H : OFF
+                 01H : ON
+
+   DATA84        Reserved
+
+   DATA85        Indicate Contents
+                 00H = Picture signal displaying
+                 01H = No signal
+                 02H = Viewer displaying
+                 03H = Test pattern displaying
+                 04H = LAN displaying
+
+   DATA86 .. 128 Reserved
+
+Response: At the time of a failure
+   A0H  C0H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+(!)
++--------------------------+-----------+----------------+
+| Selected input terminal  |   DATA07  |     DATA08     |
++--------------------------+-----------+----------------+
+| Computer1                |   1 (01H) | COMPUTER (01H) |
+| Computer2                |   2 (02H) | COMPUTER (01H) |
+| Computer3(DVI)/HDMI      |   1 (01H) | DIGITAL  (06H) |
+| Component                |   3 (03H) | COMPONENT(04H) |
+| Video                    |   1 (01H) | VIDEO    (02H) |
+| S-Video                  |   1 (01H) | S-VIDEO  (03H) |
+| Viewer                   |   1 (01H) | VIEWER   (07H) |
++--------------------------+-----------+----------------+
+
+Supplement:
+ (!!) On the U300 series, this parameter becomes F0H when non signal.
+
+
+
+
+ 009. ERROR STATUS REQUEST
+**********************************************************************
+Function:
+This command acquires the error information occurring with the
+projector.
+
+Command:
+   00H  88H  00H  00H  00H  88H
+
+Response: At the time of a success
+   20H  88H  01H  xxH  0CH  DATA01 ... DATA12  CKS
+             (*1) (*2)                         (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   * The various bits are normal is "0" and error is "1".
+   * "None" is "0" fixation.
+
+   DATA01        Error Status(1)
+                 bit0  : Lamp cover error
+                 bit1  : Temperature error(Bimetal)
+                 bit2  : None
+                 bit3  : None
+                 bit4  : Fan error
+                 bit5  : Power error
+                 bit6  : Lamp(or Lamp1) error
+                 bit7  : Lamp(or Lamp1) has reached its end of life
+
+   DATA02        Error Status(2)
+                 bit0  : Lamp(or Lamp1) has been used beyond its limit
+                 bit1  : DMD error
+                 bit2  : Lamp2 error
+                 bit3  : None
+                 bit4  : None
+                 bit5  : None
+                 bit6  : None
+                 bit7  : None
+
+   DATA03        Error Status(3)
+                 bit0  : None
+                 bit1  : FPGA error
+                 bit2  : Temperature error(Sensor)
+                 bit3  : Lamp(or Lamp1) housing error (!)
+                 bit4  : Lamp(or Lamp1) data error (!)
+                 bit5  : Mirror cover error
+                 bit6  : Lamp2 has reached its end of life
+                 bit7  : Lamp2 has been used beyond its limit
+
+   DATA04        Error Status(4)
+                 bit0  : Lamp2 housing error
+                 bit1  : Lamp2 data error
+                 bit2  : High temperature due to dust pile-up
+                 bit3  : A foreign object sensor error
+                 bit4  : Pump error
+                 bit5  : Ballast communication error
+                 bit6  : None
+                 bit7  : None
+
+   DATA05 .. 12  Reserved
+
+Response: At the time of a failure
+   A0H  88H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 015. POWER ON
+**********************************************************************
+Function:
+This command switches on the main power of the projector.
+
+Command:
+   02H  00H  00H  00H  00H  02H
+
+Response: At the time of a success
+   22H  00H  01H  xxH  00H  CKS
+             (*1) (*2)      (*3)
+
+Response: At the time of a failure
+   A2H  00H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+* The projector does not accept the other command during power on processing.
+
+
+
+ 016. POWER OFF
+**********************************************************************
+Function:
+This command switches off the main power of the projector.
+
+Command:
+   02H  01H  00H  00H  00H  03H
+
+Response: At the time of a success
+   22H  01H  01H  xxH  00H  CKS
+             (*1) (*2)      (*3)
+
+Response: At the time of a failure
+   A2H  01H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+* The projector doesn't accept the other command during power
+off processing.( It contains a cooling period.)
+
+
+
+ 018. INPUT SW CHANGE
+**********************************************************************
+Function:
+This command switches the input terminal.
+
+Command:
+   02H  03H  00H  00H  02H  01H  DATA01  CKS
+                                         (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01    Switching number
+     +-----------+---------------------+------+-------------+---------+---------+
+     | Switching | Terminal name       | HT10 | LT30s/NP60s | NP4000s | U300    |
+     |    number |                     | LT10 | NP61s/NP64s |         | V300    |
+     |           |                     |      | NP215s      |         |         |
+     +-----------+---------------------+------+-------------+---------+---------+
+     |       01H | Computer1(RGB1/RGB) |  *   |      *      |    *    |  *      |
+     |       02H | Computer2           |  x   |      *(!1)  |    *    |  *(!3)  |
+     |       1AH | Computer3(DVI)/HDMI |  x   |      x      |    *    |  *(!3)  |
+     |       06H | Video               |  *   |      *      |    *    |  *      |
+     |       0BH | S-Video             |  *   |      *      |    *    |  *      |
+     |       10H | Component           |  x   |      x      |    *    |  x      |
+     |       11H | Component           |  *   |      x      |    x    |  x      |
+     |       1FH | Viewer              |  x   |      *(!2)  |    x    |  x      |
+     +-----------+---------------------+------+-------------+---------+---------+
+                  * : Supported
+                  x : Not supported
+(!1)NP216 only
+(!2)NP52/NP62/NP54/NP64 only
+(!3)Except NP-V230X/NP-V260/NP-V230
+
+Response: At the time of a success
+   22H  03H  01H  xxH  01H  DATA01  CKS
+             (*1) (*2)              (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Results
+                 00H : Normal
+                 FFH : Error
+
+Response: At the time of a failure
+   A2H  03H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Command example:
+* When switch to the Video connector
+   02H  03H  00H  00H  02H  01H  06H  0EH
+
+
+
+ 020. PICTURE MUTE ON
+**********************************************************************
+Function:
+This command blanks the picture.
+
+Command:
+   02H  10H  00H  00H  00H  12H
+
+Response: At the time of a success
+   22H  10H  01H  xxH  00H  CKS
+             (*1) (*2)      (*3)
+
+Response: At the time of a failure
+   A2H  10H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+* Picture mute is cancelled for the following:
+  Input connector switching
+  Video signal switching
+
+
+
+ 021. PICTURE MUTE OFF
+**********************************************************************
+Function:
+This command cancels the blank picture condition.
+
+Command:
+   02H  11H  00H  00H  00H  13H
+
+Response: At the time of a success
+   22H  11H  01H  xxH  00H  CKS
+            (*1) (*2)      (*3)
+
+Response: At the time of a failure
+   A2H  11H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 022. SOUND MUTE ON
+**********************************************************************
+Function:
+This command mutes the sound.
+
+Command:
+   02H  12H  00H  00H  00H  14H
+
+Response: At the time of a success
+   22H  12H  01H  xxH  00H  CKS
+             (*1) (*2)      (*3)
+
+Response: At the time of a failure
+   A2H  12H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+* Sound mute is cancelled for the following:
+  Input connector switching
+  Video signal switching
+  Volume adjustment
+
+
+
+ 023. SOUND MUTE OFF
+**********************************************************************
+Function:
+This command cancels the sound muting.
+
+Command:
+   02H  13H  00H  00H  00H  15H
+
+Response: At the time of a success
+   22H  13H  01H  xxH  00H  CKS
+             (*1) (*2)      (*3)
+
+Response: At the time of a failure
+   A2H  13H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 024. ONSCREEN MUTE ON
+**********************************************************************
+Function:
+This command blanks the on-screen display.
+
+Command:
+   02H  14H  00H  00H  00H  16H
+
+Response: At the time of a success
+   22H  14H  01H  xxH  00H  CKS
+             (*1) (*2)      (*3)
+
+Response: At the time of a failure
+   A2H  14H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+* Onscreen mute is cancelled for the following:
+  Input connector switching
+  Video signal switching
+
+
+
+ 025. ONSCREEN MUTE OFF
+**********************************************************************
+Function:
+This command cancels the blanking of the on-screen display.
+
+Command:
+   02H  15H  00H  00H  00H  17H
+
+Response: At the time of a success
+   22H  15H  01H  xxH  00H  CKS
+             (*1) (*2)      (*3)
+
+Response: At the time of a failure
+   A2H  15H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 030-1. PICTURE ADJUST
+**********************************************************************
+Function:
+This command adjusts the Picture.
+
+Command:
+   03H  10H  00H  00H  05H  DATA01 .. DATA05  CKS
+                                              (*3)
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Adjustment items
+                 00H : Brightness
+                 01H : Contrast
+                 02H : Color
+                 03H : Hue
+                 04H : Sharpness
+
+   DATA02        FFH fixed
+
+   DATA03        Adjustment mode
+                 00H : Absolute value specification
+                 01H : Relative value specification
+
+   DATA04        Adjustment value ( Lower ranking 8 bits )
+   DATA05        Adjustment value ( Upper ranking 8 bits )
+
+Response: At the time of a success
+   23H  10H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)                      (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01 .. 02  Results
+                 0000H : Normal
+                 0000H Other : Error
+
+Response: At the time of a failure
+   A3H  10H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Command example:
+* Setting Brightness to 10
+    03H  10H  00H  00H  05H  00H  FFH  00H  0AH  00H  21H
+* Setting Brightness to -10
+    03H  10H  00H  00H  05H  00H  FFH  00H  F6H  FFH  0CH
+
+
+
+ 030-2. VOLUME ADJUST
+**********************************************************************
+Function:
+This command sets the volume.
+
+Command:
+   03H  10H  00H  00H  05H  DATA01 .. DATA05  CKS
+                                              (*3)
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        05H fixed
+
+   DATA02        Setting items
+                 00H : Volume
+                 01H : Bass
+                 02H : Treble
+                 03H : Balance
+
+   DATA03        Setting mode
+                 00H : Absolute value specification
+                 01H : Relative value specification
+
+   DATA04        Setting Value ( Lower ranking 8 bits )
+   DATA05        Setting Value ( Upper ranking 8 bits )
+
+Response: At the time of a success
+   23H  10H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)                      (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01 .. 02  Results
+                 0000H : Normal
+                 0000H Other : Error
+
+Response: At the time of a failure
+   A3H  10H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Command example:
+* Setting Volume to "10"
+   03H  10H  00H  00H  05H  05H  00H  00H  0AH  00H  27H
+
+
+
+ 030-8. KEYSTONE ADJUST
+**********************************************************************
+Function:
+This command adjusts the Keystone.
+
+Command:
+   03H  10H  00H  00H  05H  DATA01 .. DATA05  CKS
+                                              (*3)
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        15H fixed
+
+   DATA02        Adjustment items
+                 00H : H  (!)
+                 01H : V
+
+   DATA03        Adjustment mode
+                 00H : Absolute value specification
+                 01H : Relative value specification
+
+   DATA04        Adjustment value ( Lower ranking 8 bits )
+   DATA05        Adjustment value ( Upper ranking 8 bits )
+
+Response: At the time of a success
+   23H  10H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)                      (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01 .. 02  Results
+                 0000H : Normal
+                 0000H Other : Error
+
+Response: At the time of a failure
+   A3H  10H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Command example:
+* Setting Keystone H to 10
+    03H  10H  00H  00H  05H  15H  00H  00H  0AH  00H  37H
+* Setting Keystone H to -10
+    03H  10H  00H  00H  05H  15H  00H  00H  F6H  FFH  22H
+
+(!)  NP4000,NP4100 Series
+
+
+
+ 030-12. IMAGE MODE ADJUST
+**********************************************************************
+Function:
+This command adjusts the Image Mode.
+
+Command:
+   03H  10H  00H  00H  05H  DATA01 .. DATA05  CKS
+                                              (*3)
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01 .. 02  Adjustment items
+                   +--------+--------+---------------------------+
+                   | DATA01 | DATA02 | Adjustment items          |
+                   +--------+--------+---------------------------+
+                   |    18H |    00H | Aspect Ratio Input (!)    |
+                   +--------+--------+---------------------------+
+
+   DATA03        Adjustment mode
+                 00H : Absolute value specification
+                 01H : Relative value specification
+
+   DATA04        Adjustment value ( Lower ranking 8 bits )
+   DATA05        Adjustment value ( Upper ranking 8 bits )
+
+Response: At the time of a success
+   23H  10H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)                      (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01 .. 02  Results
+                 0000H : Normal
+                 0000H Other : Error
+
+Response: At the time of a failure
+   A3H  10H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Command example:
+* Setting the Aspect Ratio to Letter Box
+    03H  10H  00H  00H  05H  18H  00H  00H  01H  00H  31H
+
+(!) Method of Specifying the Absolute Value
+    of Special Adjustment Values
+    NP4000s
+    +---------------------------+--------+--------+
+    |                           | DATA04 | DATA05 |
+    +---------------------------+--------+--------+
+    | Aspect Ratio 4:3 (Window) |   00H  |    00H |
+    | Aspect Ratio Letter Box   |   01H  |    00H |
+    | Aspect Ratio 1.78:1(16:9) |   02H  |    00H |
+    | Aspect Ratio Crop/WideZoom|   03H  |    00H |
+    | Aspect Ratio 4:3 Fill     |   04H  |    00H |
+    | Aspect Ratio Normal/Auto  |   05H  |    00H |
+    | Aspect Ratio Full         |   06H  |    00H |
+    | Aspect Ratio 16:10        |   0CH  |    00H |
+    | Aspect Ratio 15:9         |   0DH  |    00H |
+    | Aspect Ratio Native       |   0EH  |    00H |
+    +---------------------------+--------+--------+
+
+    NP61s/NP64s/NP215s/V300
+    +----------------------------+--------+--------+-------+--------+------+
+    |                            | DATA04 | DATA05 | NP61s | NP64s  | U300 |
+    |                            |        |        |       | NP215s |      |
+    |                            |        |        |       | V300   |      |
+    +----------------------------+--------+--------+-------+--------+------+
+    | Aspect Ratio Normal / Auto |   00H  |   00H  |   *   |   *    |  *   |
+    | Aspect Ratio Wide Zoom     |   01H  |   00H  |   *   |   *    |  x   |
+    | Aspect Ratio Cinema / 16:9 |   02H  |   00H  |   *   |   *    |  *   |
+    | Aspect Ratio Native        |   03H  |   00H  |   *   |   *    |  *   |
+    | Aspect Ratio 4:3           |   04H  |   00H  |   x   |   *    |  *   |
+    | Aspect Ratio 15:9          |   05H  |   00H  |   x   |   *    |  *   |
+    | Aspect Ratio 16:10         |   06H  |   00H  |   x   |   *    |  *   |
+    | Aspect Ratio Letter Box    |   07H  |   00H  |   x   |   x    |  x   |
+    | Aspect Ratio 5:4           |   08H  |   00H  |   x   |   x    |  *   |
+    +----------------------------+--------+--------+-------+--------+------+
+     * : Supported
+     x : Not supported
+
+
+
+ 037. INFORMATION REQUEST
+**********************************************************************
+Function:
+This command acquires the projector information.
+
+Command:
+   03H  8AH  00H  00H  00H  8DH
+
+Response: At the time of a success
+   23H  8AH  01H  xxH  62H  DATA01 .. DATA98  CKS
+             (*1) (*2)                        (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01 .. 49  Projector name (!!)
+   DATA50 .. 82  Reserved
+   DATA83 .. 86  Lamp Hour Meter (second) (!)
+   DATA87 .. 90  Filter Usage    (second)
+   DATA91 .. 94  Reserved
+   DATA95 .. 98  Projector Usage (second)
+
+Response: At the time of a failure
+   A3H  8AH  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+Supplement:
+ (!) Lamp Hour Meter
+ This is the timer for normal lamp mode conversion. 
+ (!!) NP4000/4001, NP4100/4100W, NP215, NP216 only
+
+   Lamp Timer Acquisition Examples
+   DATA83  DATA84  DATA85  DATA86  :  Lamp Timer
+      00H     00H     00H     00H  :  Total 0 seconds
+      C0H     65H     52H     00H  :  Total 5400000 seconds = 1500 hours
+      00H     E4H     57H     00H  :  Total 5760000 seconds = 1600 hours
+
+* The projector's hours of use is displayed in terms of Normal mode values.
+It is also displayed with truncated a number after decimal point.
+
+
+
+ 037-1. LAMP INFORMATION REQUEST
+**********************************************************************
+Function:
+This command acquires the lamp information (in terms of Normal mode 
+values) of projector.
+
+Command:
+   03H  8CH  00H  00H  00H  8FH
+
+Response: At the time of a success
+   23H  8CH  01H  xxH  10H  DATA01 .. DATA16  CKS
+             (*1) (*2)                        (*3)
+
+ Data Portion  Contents
+ -------------------------------------------------------------------
+ DATA01 .. 04  Lamp Hour Meter(Normal mode) (second)
+ DATA05 .. 08  Reserved
+ DATA09 .. 12  Lamp Use Warning Starting Time(Normal mode) (second)
+ DATA13 .. 16  Lamp Use Prohibited Time(Normal mode) (second)
+
+Response: At the time of a failure
+   A3H  8CH  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+
+   Example for acquiring remaining lamp time
+   (in terms of Normal mode values)
+
+ : Lamp Hour Meter (Normal mode)
+   DATA01  DATA02  DATA03  DATA04
+     30H     2AH     00H     00H   :    10800 second
+
+ : Starting time for lamp usage warning message
+   (in terms of Normal mode values)
+   DATA09  DATA10  DATA11  DATA12
+     00H     DDH     6DH     00H  :   7200000 second
+
+   Lamp remaining time (in terms of Normal mode values)
+   = (7200000 - 10800) / 3600 = 1997 hour
+
+
+
+ 037-2. LAMP INFORMATION REQUEST 2
+**********************************************************************
+Function:
+This command acquires lamp remaining amount.
+
+Command:
+   03H  94H  00H  00H  00H  97H
+
+Response: At the time of a success
+   23H  94H  01H  xxH  05H  DATA01 .. DATA05  CKS
+             (*1) (*2)                        (*3)
+
+ Data Portion  Contents
+ -------------------------------------------------------------------
+ DATA01 .. 04  Reserved
+ DATA05        lamp remaining amount (100% to -10%)
+
+Response: At the time of a failure
+   A3H  94H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 037-4. LAMP INFORMATION REQUEST 3
+**********************************************************************
+Function:
+This command acquires the information on the projector lamp.
+
+Command:
+   03H  96H  00H  00H  02H  DATA01  DATA02  CKS
+                                            (*3)
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           Target
+                    00H : Lamp1
+                    01H : Lamp2
+   DATA02           Item
+                    00H : Lamp Hour Meter (second)(!3)
+                    01H : Lamp usage time (second)(!4)
+                    04H : lamp remaining amount until lamp warning message
+                          ( 100% to -X%(!2) )
+                    05H : Lamp usage time (Normal mode)(second)(!5)
+                    06H : Lamp usage time (Eco mode)(second)(!5)
+                    08H : Remaining time until lamp warning message starts
+                          to appear (in terms of specified values)
+                    09H : Remaining time until lamp warning message starts
+                          to appear (in terms of Normal mode values)
+                    0AH : Remaining time until lamp warning message starts
+                          to appear (in terms of Eco mode values)
+                    10H : Remaining time until inhibition of lamp usage
+                          (in terms of specified values)
+                    11H : Remaining time until inhibition of lamp usage
+                          (in terms of Normal mode values)
+                    12H : Remaining time until inhibition of lamp usage
+                          (in terms of Eco mode values)
+
+Response: At the time of a success
+   23H  96H  01H  xxH  06H  DATA01 to DATA06  CKS
+             (*1) (*2)                        (*3)
+
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           same values as DATA01 of the command
+   DATA02           same values as DATA02 of the command
+   DATA03 to 06     Acquired information(!1)
+
+Response: At the time of a failure
+   A3H  96H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+   * In case of acquiring lamp's use of hours
+   03H  96H  00H  00H  02H  00H  01H  9CH
+
+   Example of acquisition
+   DATA03  DATA04  DATA05  DATA06  :  lamp's use of hours
+   50H     46H     00H     00H     :  18000 seconds
+
+   Lamp Usage = 18000 / 3600 = 5 hour
+
+   * In case of acquiring the remaining time until lamp warning
+     message starts to appear (in terms of specified values)
+    03H  96H  00H  00H  02H  00H  08H  A3H
+
+    Example of acquisition
+    DATA03  DATA04  DATA05  DATA06  :  Remaining time
+    40H     7EH     05H     00H     :  360000 seconds
+
+    Remaining time until lamp warning message starts to appear
+    = 360000/ 3600 = 100 hours
+
+(!1) If "time" is specifed for "Options for acquisition", 
+     values in seconds will be returned.
+(!2) X = 100 - ((Lamp Use Prohibited Time * 100) / Lamp Use Warning Starting Time)
+     Example) The case of Lamp Use Prohibited Time 2100[H]ÅA
+              Lamp Use Warning Starting Time 2000[H] Model.
+     X = 100 - ((2100 * 100) / 2000) = -5[%]
+(!3) Lamp Hour Meter
+     This is the timer for normal lamp mode conversion.
+(!4) Lamp usage time
+     This is the lamp total usage. It is displayed in the projector's menu.
+(!5) NP4000/4001, NP4100/4100W : This function is not supported.
+
+
+
+ 037-5. TEMP INFORMATION REQUEST
+**********************************************************************
+Function:
+This command acquires the information about temperature inside 
+the projector.
+
+Command
+   03H  99H  00H  00H  01H  DATA01  CKS
+                                    (*3)
+
+   Data Portion     Contents
+   -----------------------------------------------------------------
+     DATA01           Target sensor
+                        00H : Intake (outside air) temperature
+                        01H : Lamp (inside air) temperature (!)
+                        02H or later reserved 
+                        (allocated sequentially to each model)
+
+Response: At the time of a success
+   23H  99H  01H  xxH  05H  DATA01 .. DATA05  CKS
+             (*1) (*2)                        (*3)
+
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           Setting Items
+                    ( Same as DATA01 of the transmit data )
+   DATA02 .. 05     Temperature information 
+                    (long type unit: 0.1 degree Celsius/32.18 degrees 
+                     Fahrenheit: 0 degree Celsius/32 degrees Fahrenheit 
+                     or less will be returned as 0 degree Celsius/32 
+                     degrees Fahrenheit)
+
+Response: At the time of a failure
+   A3H  99H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+Example for Temp
+   DATA02  DATA03  DATA04  DATA05
+   CBH     01H     00H     00H      :  45.9 degrees Celsius/
+                                      114.6 degrees Fahrenheit
+
+(!)  NP61, NP64 Series only
+
+
+
+ 037-7. LAMP INFORMATION REQUEST 4
+**********************************************************************
+Function:
+This command acquires the information on the projector lamp.
+
+Command:
+   03H  9BH  00H  00H  03H  DATA01  DATA02  DATA03  CKS
+                                                    (*3)
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           Target
+                    00H : Lamp1
+                    01H : Lamp2
+   DATA02           Unit(!4)
+                    00H : Second
+                    01H : Reserved
+                    02H : Hour
+   DATA03           Item
+                    00H : Lamp Hour Meter (second)(!2)
+                    01H : Lamp usage time (second)(!3)
+                    04H : lamp remaining amount until lamp warning message
+                          ( 100% to -X%(!1) )
+                    05H : Lamp usage time (Normal mode)(second) (!5)
+                    06H : Lamp usage time (Eco mode)(second) (!5)
+                    08H : Remaining time until lamp warning message starts
+                          to appear (in terms of specified values)
+                    09H : Remaining time until lamp warning message starts
+                          to appear (in terms of Normal mode values)
+                    0AH : Remaining time until lamp warning message starts
+                          to appear (in terms of Eco mode values)
+                    10H : Remaining time until inhibition of lamp usage
+                          (in terms of specified values)
+                    11H : Remaining time until inhibition of lamp usage
+                          (in terms of Normal mode values)
+                    12H : Remaining time until inhibition of lamp usage
+                          (in terms of Eco mode values)
+
+Response: At the time of a success
+   23H  9BH  01H  xxH  07H  DATA01 to DATA07  CKS
+             (*1) (*2)                        (*3)
+
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           same values as DATA01 of the command
+   DATA02           same values as DATA02 of the command
+   DATA03           same values as DATA03 of the command
+   DATA04 to 07     Acquired information
+
+Response: At the time of a failure
+   A3H  9BH  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+   * In case of acquiring lamp's use of hours
+   03H  9BH  00H  00H  03H  00H  00H  01H  CKS
+
+   Example of acquisition
+   DATA04  DATA05  DATA06  DATA07  :  lamp's use of hours
+   50H     46H     00H     00H     :  18000 seconds
+
+   Lamp Usage = 18000 / 3600 = 5 hour
+
+(!1) X = 100 - ((Lamp Use Prohibited Time * 100) / Lamp Use Warning Starting Time)
+     Example) The case of Lamp Use Prohibited Time 2100[H]ÅA
+              Lamp Use Warning Starting Time 2000[H] Model.
+     X = 100 - ((2100 * 100) / 2000) = -5[%]
+(!2) Lamp Hour Meter
+     This is the timer for normal lamp mode conversion.
+(!3) Lamp usage time
+     This is the lamp total usage. It is displayed in the projector's menu.
+(!4) This setting is ignored, if the Item's unit is not time.
+(!5) NP4000/4001, NP4100/4100W : This function is not supported.
+
+
+
+ 050. REMOTE KEY CODE
+**********************************************************************
+Function:
+This command sends remote control key codes of projector.
+
+Command:
+   02H  0FH  00H  00H  02H  DATA01  DATA02  CKS
+                                            (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01 .. 02  Remote control key code (Word type)
+                    Key number  DATA01  DATA02     Key name
+                   --------------------------------------------
+                           2      02H     00H     POWER ON
+                           3      03H     00H     POWER OFF
+                           4      04H     00H     SOURCE (AUTO)
+                           5      05H     00H     AUTO
+                           6      06H     00H     MENU
+                           7      07H     00H     UP
+                           8      08H     00H     DOWN
+                           9      09H     00H     RIGHT
+                          10      0AH     00H     LEFT
+                          11      0BH     00H     ENTER
+                          12      0CH     00H     CANCEL
+                          13      0DH     00H     HELP
+                          19      13H     00H     MUTE
+                          71      47H     00H     PICMUTE ON
+                          72      48H     00H     PICMUTE OFF
+                          73      49H     00H     SNDMUTE ON
+                          74      4AH     00H     SNDMUTE OFF
+                          75      4BH     00H     RGB1(*5)
+                          76      4CH     00H     RGB2(*5)
+                          79      4FH     00H     VIDEO1
+                          81      51H     00H     S-VIDEO1
+                          85      55H     00H     VIEWER
+                         132      84H     00H     VOLUME UP
+                         133      85H     00H     VOLUME DOWN
+                         134      86H     00H     KEYSTONE UP
+                         135      87H     00H     KEYSTONE DOWN
+                         138      8AH     00H     FREEZE
+                         163      A3H     00H     ASPECT
+                         215      D7H     00H     SEQSOURCE(source select)
+                         216      D8H     00H     RGB TOGGLE
+                         217      D9H     00H     VIDEO  TOGGLE
+                         223      DFH     00H     PICTURE MANAGEMENT
+                         225      E1H     00H     COMPONENT
+                         228      E4H     00H     DVI/DVI(DIGITAL)
+                         261      05H     01H     HDMI
+
+Response: At the time of a success
+   22H  0FH  01H  xxH  01H  DATA01  CKS
+             (*1) (*2)              (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Results
+                 00H : Normal
+                 FFH : Error
+
+Response: At the time of a failure
+   A2H  0FH  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Command example:
+ * Sending the AUTO key code
+   02H  0FH  00H  00H  02H  05H  00H  18H
+
+
+
+ 060. GAIN PARAMETER REQUEST 2
+**********************************************************************
+Function:
+This command acquires the adjustment values.
+
+Command:
+   03H  04H  00H  00H  03H  DATA01 .. DATA03  CKS
+                                              (*3)
+   Data Portion    Contents
+   -------------------------------------------------------------------
+   DATA01 .. 02    Acquirement items (!)
+   DATA03          00H fixed
+
+Response: At the time of a success
+   23H  04H  01H  xxH  0DH  DATA01 .. DATA13  CKS
+             (*1) (*2)                        (*3)
+
+   Data Portion     Contents
+   -------------------------------------------------------------------
+   DATA01           Adjustment status
+                    00H : Displaying impossible
+                    01H : Adjustment impossible
+                    02H : Adjustment possible
+                    FFH : Selected gain is not available.
+   DATA02           Maximum adjustment value ( Lower ranking 8 bits )
+   DATA03           Maximum adjustment value ( Upper ranking 8 bits )
+   DATA04           Minimum adjustment value ( Lower ranking 8 bits )
+   DATA05           Minimum adjustment value ( Upper ranking 8 bits )
+   DATA06           Default adjustment value ( Lower ranking 8 bits )
+   DATA07           Default adjustment value ( Upper ranking 8 bits )
+   DATA08           Current value ( Lower ranking 8 bits )
+   DATA09           Current value ( Upper ranking 8 bits )
+   DATA10 .. 13     Reserved
+
+Response: At the time of a failure
+   A3H  04H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+ (!) Acquirement items
+   +--------+--------+--------------------------------------+---------+-------+--------+------+
+   | DATA01 | DATA02 | Acquirement name                     | NP4000s | NP61s | NP215s | U300 |
+   | DATA01 | DATA02 | Acquirement name                     |         | NP64s | V300   |      |
+   +--------+--------+--------------------------------------+---------+-------+--------+------+
+   |    00H |    00H | Picture / Brightness                 |    *    |   *   |   *    |  *   |
+   |    01H |    00H | Picture / Contrast                   |    *    |   *   |   *    |  *   |
+   |    02H |    00H | Picture / Color                      |    *    |   *   |   *    |  *   |
+   |    03H |    00H | Picture / Hue                        |    *    |   *   |   *    |  *   |
+   |    04H |    00H | Picture / Sharpness                  |    *    |   *   |   *    |  *   |
+   |    05H |    00H | Volume                               |    *    |   *   |   *    |  *   |
+   |    13H |    00H | Color Temperature                    |    *    |   *   |   *    |  x   |
+   |    14H |    00H | White Balance / Brightness R         |    *    |   x   |   x    |  x   |
+   |    14H |    01H | White Balance / Brightness G         |    *    |   x   |   x    |  x   |
+   |    14H |    02H | White Balance / Brightness B         |    *    |   x   |   x    |  x   |
+   |    14H |    03H | White Balance / Contrast R           |    *    |   x   |   x    |  x   |
+   |    14H |    04H | White Balance / Contrast G           |    *    |   x   |   x    |  x   |
+   |    14H |    05H | White Balance / Contrast B           |    *    |   x   |   x    |  x   |
+   |    15H |    01H | Keystone / V                         |    x    |   *   |   *    |  x   |
+   |    16H |    00H | Gamma                                |    x    |   *   |   *    |  *   |
+   |    18H |    00H | Aspect Ratio / Input Signal          |    x    |   *   |   *    |  x   |
+   |    1AH |    00H | Noise Reduction(Luminance)           |    x    |   *   |   *    |  x   |
+   |    22H |    00H | Telecine                             |    x    |   *   |   *    |  x   |
+   |    53H |    00H | Picture Management                   |    x    |   *   |   *    |  *   |
+   |    59H |    00H | Base Setting                         |    x    |   *   |   *    |  x   |
+   |    97H |    00H | Wall Color                           |    x    |   *   |   *    |  *   |
+   |    9FH |    00H | Dynamic Contrast                     |    x    |   x   |   *    |  x   |
+   +--------+--------+--------------------------------------+---------+-------+--------+------+
+    * : Supported
+    x : Not supported
+
+Command example:
+   * In case of acquiring Picture Brightness
+    03H  04H  00H  00H  03H  00H  00H  00H  0AH
+
+
+
+ 077. MUTE CONTROL
+**********************************************************************
+Function:
+This command controls the mute of picture, sound and on-screen.
+
+Command:
+   02H  1AH  00H  00H  02H  DATA01  DATA02  CKS
+                                            (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Setting items
+                 00H : Image(Picture)
+                 01H : Sound
+                 02H : On-Screen
+
+   DATA02        Setting Value
+                 00H : OFF
+                 01H : ON
+
+Response: At the time of a success
+   22H  1AH  01H  xxH  01H  DATA01  CKS
+             (*1) (*2)              (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Results
+                 00H : Normal
+                 01H : Error
+
+Response: At the time of a failure
+   A2H  1AH  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+ * Sound mute is cancelled in the following cases:
+   Input connector switching
+   Video signal switching
+   Volume adjustment
+
+
+
+ 078-1. SETTING REQUEST
+**********************************************************************
+Function:
+This command acquires the function information of projector.
+
+Command:
+   00H  85H  00H  00H  01H  00H  86H
+
+Response: At the time of a success
+   20H  85H  01H  xxH  20H  DATA01 ..  DATA32  CKS
+             (*1) (*2)                         (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01 .. 03  Projector type
+                   +--------+--------+--------+-------------------+
+                   | DATA01 | DATA02 | DATA03 |                   |
+                   +--------+--------+--------+-------------------+
+                   |    08H |    00H |    07H | NP4000            |
+                   |    08H |    00H |    10H | NP4100            |
+                   |    08H |    01H |    10H | NP4100W           |
+                   |    11H |    00H |    00H | NP41/61           |
+                   |    11H |    01H |    00H | NP52/62           |
+                   |    11H |    00H |    12H | NP64              |
+                   |    11H |    01H |    12H | NP54              |
+                   |    11H |    02H |    12H | NP63              |
+                   |    11H |    03H |    12H | NP43              |
+                   |    11H |    04H |    12H | NP53              |
+                   |    11H |    00H |    11H | NP215             |
+                   |    11H |    01H |    11H | NP210             |
+                   |    11H |    02H |    11H | NP115             |
+                   |    11H |    03H |    11H | NP110             |
+                   |    11H |    04H |    11H | NP216             |
+                   |    14H |    01H |    10H | NP-U250X          |
+                   |    14H |    02H |    10H | NP-U300X          |
+                   |    14H |    03H |    10H | NP-U260W          |
+                   |    14H |    04H |    10H | NP-U310W          |
+                   |    16H |    00H |    10H | NP-V300X          |
+                   |    16H |    01H |    10H | NP-V260X          |
+                   |    16H |    02H |    10H | NP-V230X          |
+                   |    16H |    03H |    10H | NP-V260           |
+                   |    16H |    04H |    10H | NP-V230           |
+                   +--------+--------+--------+-------------------+
+
+   DATA04        Sound function
+                 00H : Not available
+                 01H : Available
+
+   DATA05        Calender function
+                 00H : No function
+                 01H or 03H : Timer function, sleep timer function
+                 02H : Sleep timer function
+
+   DATA06 .. 32    Reserved
+
+Response: At the time of a failure
+   A0H  85H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 078-2. RUNNING STATUS REQUEST
+**********************************************************************
+Function:
+This command acquires the status of the projector operation.
+
+Command:
+   00H  85H  00H  00H  01H  01H  87H
+
+Response: At the time of a success
+   20H  85H  01H  xxH  10H  DATA01 ..  DATA16  CKS
+             (*1) (*2)                         (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01 .. 02  Reserved
+
+   DATA03        Projector status
+                 00H : Idling
+                 01H : Power On
+
+   DATA04        Cooling processing
+                 00H : No execution(Normal condition)
+                 01H : During execution
+
+   DATA05        Power On/Off processing
+                 00H : No execution(Normal condition)
+                 01H : During execution
+
+   DATA06        Status of operation
+                 00H : Idling
+                 04H : Power On
+                 05H : Cooling
+                 06H : Idling(Error occurrence)
+                 Other than above : (nondisclosure)
+                 internal use of code during a state transition period
+
+   DATA07        PC Card insertion
+                 00H : Not inserted
+                 01H : Inserted
+
+   DATA08        USB Mouse connection
+                 00H : Not connected
+                 01H : Connected
+
+   DATA09 .. 16  Reserved
+
+Response: At the time of a failure
+   A0H  85H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 078-3. INPUT STATUS REQUEST
+**********************************************************************
+Function:
+This command acquires the status of input signal of the projector.
+
+Command:
+   00H  85H  00H  00H  01H  02H  88H
+
+Response: At the time of a success
+   20H  85H  01H  xxH  10H  DATA01 ..  DATA16  CKS
+             (*1) (*2)                         (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Selecting signal processing
+                 00H : No execution(Normal condition)
+                 01H : During execution
+
+   DATA02        Signal number( Entry list number - 1 )
+                 0 .. 199
+
+   DATA03 .. 04  Selected input terminal
+                 +--------------------+--------+--------+
+                 |  Terminal name     | DATA03 | DATA04 |
+                 +--------------------+--------+--------+
+                 | Computer1          |    01H |    01H |
+                 | Computer2          |    02H |    01H |
+                 | Computer3(DVI)/HDMI|    01H |    06H |
+                 | Component          |    03H |    04H |
+                 | Video              |    01H |    02H |
+                 | S-Video            |    01H |    03H |
+                 | Viewer             |    01H |    07H |
+                 +--------------------+--------+--------+
+
+   DATA05        Entry list type
+                 01H : Default
+                 02H : User
+
+   DATA06        Test pattern display
+                 00H : No display(Normal condition)
+                 01H : Displaying
+
+   DATA07 ..08   Reserved
+
+   DATA09        Indicate Contents
+                 00H = Picture signal displaying
+                 01H = No signal
+                 02H = Viewer displaying
+                 03H = Test pattern displaying
+                 04H = LAN displaying
+
+   DATA10 .. 16  Reserved
+
+Response: At the time of a failure
+   A0H  85H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 078-4. MUTE STATUS REQUEST
+**********************************************************************
+Function:
+This command acquires the status of the mute of projector.
+
+Command:
+   00H  85H  00H  00H  01H  03H  89H
+
+Response: At the time of a success
+   20H  85H  01H  xxH  10H  DATA01 ..  DATA16  CKS
+             (*1) (*2)                         (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Picture mute
+                 00H : OFF
+                 01H : ON
+
+   DATA02        Sound mute
+                 00H : OFF
+                 01H : ON
+
+   DATA03        On-screen mute
+                 00H : OFF
+                 01H : ON
+
+   DATA04        Forced on-screen mute
+                 00H : OFF
+                 01H : ON
+
+   DATA05        On-screen display
+                 00H : No display
+                 01H : Displaying
+
+   DATA06 .. 16  Reserved
+
+Response: At the time of a failure
+   A0H  85H  ID  xxH  02H  DATA01  DATA02  CKS
+            (*1) (*2)           (*4)       (*3)
+
+
+
+ 078-5. MODEL NAME REQUEST
+**********************************************************************
+Function:
+This command acquires the model name of the projector.
+
+Command:
+   00H  85H  00H  00H  01H  04H  8AH
+
+Response: At the time of a success
+   20H  85H  01H  xxH  20H  DATA01 ..  DATA32  CKS
+             (*1) (*2)                         (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01 .. 32  Model name (NULL termination character string)
+
+Response: At the time of a failure
+   A0H  85H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 078-6. COVER STATUS REQUEST
+**********************************************************************
+
+Function:
+This command acquires the status of lens cover of the projector.
+
+Command:
+   00H  85H  00H  00H  01H  05H  8BH
+
+Response: At the time of a success
+   20H  85H  01H  xxH  01H  DATA01  CKS
+             (*1) (*2)              (*3)
+
+     Data Portion     Contents
+     -----------------------------------------------------------------
+     DATA01           Status
+                      00H : Normal
+                      01H : Cover Close
+
+Response: At the time of a failure
+   A0H  85H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 079. FREEZE CONTROL
+**********************************************************************
+
+Function:
+This command controls the freeze.
+
+Command:
+   01H  98H  00H  00H  01H  DATA01 CKS
+             (*1) (*2)             (*3)
+
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           Operation types
+                      00H : Reserved
+                      01H : Freeze start
+                      02H : Freeze cancel
+
+Response: At the time of a success
+   21H  98H  01H  xxH  01H  DATA01  CKS
+             (*1) (*2)              (*3)
+
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           Results
+                      00H : Normal
+                      01H : Error
+
+Response: At the time of a failure
+   A1H  98H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+
+
+
+ 084. INFORMATION STRING REQUEST
+**********************************************************************
+Function:
+This command acquires information character string displayed from
+projector.
+
+Command:
+   00H  D0H  00H  00H  03H  DATA01 to DATA03  CKS
+                                              (*3)
+
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           Resource language selection
+                      00H : English fixed
+   DATA02           Classification by information type (!1)
+   DATA03           Selection for character string to be acquired
+                      01H : Acquisition of information character string
+
+Response: At the time of a success
+   20H  D0H  01H  xxH  ??H  DATA01 to DATA??  CKS
+             (*1) (*2)                        (*3)
+
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           Classification by information type (!1)
+                     ( Same as DATA02 of the transmit data )
+   DATA02           Character string types
+                     ( Same as DATA03 of the transmit data )
+   DATA03           String length of label / information
+                     ( not including NULL character )
+   DATA04 to DATAxx Character string of label / information
+                     ( NULL termination character string )
+
+Response: At the time of a failure
+   A0H  D0H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+(!1)Information
+    type Number   Title        Description
+   -----------------------------------------------------------------
+     3 (03H)                   Horizontal Frequency
+     4 (04H)                   Vertical Frequency
+
+
+
+097-8. LAMP MODE REQUEST
+**********************************************************************
+Function:
+This command acquires the setting of the Lamp Mode specified on the
+projector.
+
+Command:
+   03H  B0H  00H  00H  01H  DATA01  CKS
+                                    (*3)
+     Data Portion     Contents
+     -----------------------------------------------------------------
+     DATA01           Acquisition item
+                        07H : Lamp Mode
+
+Response: At the time of a success
+   23H  B0H  01H  xxH  02H  DATA01  DATA02  CKS
+
+     Data Portion     Contents
+     -----------------------------------------------------------------
+     DATA01           Same as DATA01 of the transmit data
+     DATA02           Current value
+                        00H : Normal
+                        01H : Eco
+
+Response: At the time of a failure
+   A3H  B0H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 098-8. LAMP MODE SET
+**********************************************************************
+Function:
+This command sets the Lamp Mode of the projector.
+
+Command:
+   03H  B1H  00H  00H  02H  DATA01  DATA02  CKS
+                                            (*3)
+
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           Setting Items
+                      07H : Lamp Mode
+   DATA02           Setting Value
+                      00H : Normal
+                      01H : Eco
+
+Response: At the time of a success
+   23H  B1H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           Same as DATA01 of the transmit data
+   DATA02           Results
+                      00H : Normal
+                      01H : Error
+
+Response: At the time of a failure
+   A3H  B1H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 098-11. ORIENTATION SET
+**********************************************************************
+Function:
+This command sets the orientation of projector.
+
+Command:
+   03H  B1H  00H  00H  02H  DATA01  DATA02  CKS
+                                            (*3)
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        0AH fixed
+   DATA02        Setting Value
+                 00H : Desktop Front
+                 01H : Ceiling Rear
+                 02H : Desktop Rear
+                 03H : Ceiling Front
+
+Response: At the time of a success
+   23H  B1H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)                      (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        0AH fixed
+   DATA02        Results
+                 00H : Normal
+                 01H : Error
+
+Response: At the time of a failure
+   A3H  B1H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 098-24. POWER MANAGEMENT SET
+**********************************************************************
+Function:
+This command sets the Power Management of the projector.
+
+Command:
+     03H  B1H  00H  00H  02H  DATA01  DATA02  CKS
+                                             (*3)
+
+     Data Portion     Contents
+     -----------------------------------------------------------------
+     DATA01           Setting Items
+                        17H : Power Management (!)
+     DATA02           Setting Value(!!)
+                        00H : Off
+                        01H : 0:05
+                        02H : 0:10
+                        03H : 0:20
+                        04H : 0:30
+
+Response: At the time of a success
+   23H  B1H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)                      (*3)
+
+     Data Portion     Contents
+     -----------------------------------------------------------------
+     DATA01           Same as DATA01 of the transmit data
+     DATA02           Results
+                        00H : Normal
+                        01H : Error
+
+Response: At the time of a failure
+   A3H  B1H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+ (!) On the NP61 series, "Power Management" has been changed to "Auto Power Off".
+ (!!) On the U300 series, set minutes value.
+
+
+
+ 098-148. KEYSTONE SELECT SET
+**********************************************************************
+Function:
+This command sets the Auto Keystone function of the projector.
+
+Command:
+   03H  B1H  00  00H  02H  DATA01  DATA02  CKS
+                                           (*3)
+   Data Portion     Contents
+   -----------------------------------------------------------------
+   DATA01           Setting Items
+                      93H : Keystone Select
+   DATA02           Setting Value
+                      00H : Auto
+                      01H : Manual
+
+Response: At the time of a success
+   23H  B1H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)                      (*3)
+
+     Data Portion     Contents
+     -----------------------------------------------------------------
+     DATA01           Same as DATA01 of the transmit data
+     DATA02           Results
+                        00H : Normal
+                        01H : Error
+
+Response: At the time of a failure
+   A3H  B1H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 110. AUTO FUNCTIONS EXECUTE
+**********************************************************************
+Function:
+This command executes the auto functions.
+
+Command:
+   03H  B6H  00H  00H  01H  DATA01  CKS
+                                    (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Execution items
+                 +-----+---------+
+                 |     |  Focus  |
+                 +-----+---------+
+                 | 00H |    !    |
+                 | 01H |    *    |
+                 +-----+---------+
+                      !: According to projector setting
+                      *: Executing
+
+Response: At the time of a success
+   23H  B6H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)                      (*3)
+
+   Data Portion  Contents
+   -------------------------------------------------------------------
+   DATA01        Execution items(Same as DATA01 of the transmit data)
+   DATA02        Results
+                 00H : Normal
+                 01H : Error
+
+Response: At the time of a failure
+   A3H  B6H  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 305-1. BASE MODEL TYPE REQUEST
+**********************************************************************
+Function:
+This command acquires the projector type.
+
+Command:
+   00H  BFH  00H  00H  01H  00H  C0H
+
+Response: At the time of a success
+   20H  BFH  01H  xxH  10H  DATA01 ... DATA16  CKS
+             (*1) (*2)                         (*3)
+
+   Data Portion     Contents
+   -------------------------------------------------------------------
+   DATA01           00H fixed
+   DATA02 ... 03    Projector type
+                    See DATA13...14
+   DATA04 ... 12    Model name (NULL termination character string)
+   DATA13 ... 14    Projector type
+                    +--------+--------+--------+--------+-------------------+
+                    | DATA02 | DATA03 | DATA13 | DATA14 |                   |
+                    +--------+--------+--------+--------+-------------------+
+                    |    02H |    05H |    00H |    05H | HT410             |
+                    |    02H |    05H |    00H |    05H | HT510             |
+                    |    02H |    02H |    00H |    05H | LT180             |
+                    |    02H |    02H |    00H |    06H | LT25/30/35        |
+                    |    02H |    02H |    00H |    07H | NP40/50/60        |
+                    |    03H |    08H |    00H |    07H | NP4000/4001       |
+                    |    03H |    08H |    00H |    10H | NP4100            |
+                    |    03H |    08H |    01H |    10H | NP4100W           |
+                    |    FFH |    11H |    00H |    00H | NP41/61           |
+                    |    FFH |    11H |    01H |    00H | NP52/62           |
+                    |    FFH |    11H |    00H |    12H | NP64              |
+                    |    FFH |    11H |    01H |    12H | NP54              |
+                    |    FFH |    11H |    02H |    12H | NP63              |
+                    |    FFH |    11H |    03H |    12H | NP43              |
+                    |    FFH |    11H |    04H |    12H | NP53              |
+                    |    FFH |    11H |    00H |    11H | NP215             |
+                    |    FFH |    11H |    01H |    11H | NP210             |
+                    |    FFH |    11H |    02H |    11H | NP115             |
+                    |    FFH |    11H |    03H |    11H | NP110             |
+                    |    FFH |    11H |    04H |    11H | NP216             |
+                    |    FFH |    14H |    01H |    10H | NP-U250X          |
+                    |    FFH |    14H |    02H |    10H | NP-U300X          |
+                    |    FFH |    14H |    03H |    10H | NP-U260W          |
+                    |    FFH |    14H |    04H |    10H | NP-U310W          |
+                    |    FFH |    16H |    00H |    10H | NP-V300X          |
+                    |    FFH |    16H |    01H |    10H | NP-V260X          |
+                    |    FFH |    16H |    02H |    10H | NP-V230X          |
+                    |    FFH |    16H |    03H |    10H | NP-V260           |
+                    |    FFH |    16H |    04H |    10H | NP-V230           |
+                    +--------+--------+--------+--------+-------------------+
+   DATA15 ... 16    Reserved
+
+Response: At the time of a failure
+   A0H  BFH  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 305-2. VERSION INFORMATION REQUEST
+**********************************************************************
+Function:
+This command acquires imformations of projector.
+
+
+Command:
+   00H  BFH  00H  00H  02H  01H  06H  CKS
+                                      (*3)
+
+Response: At the time of a success
+   20H  BFH  01H  xxH  12H  DATA01  Å`  DATA12  CKS
+             (*1) (*2)                          (*3)
+
+   Data Portion     Contents
+   -------------------------------------------------------------------
+   DATA01           01H fixed
+   DATA02           06H fixed
+   DATA03-DATA18    Serial Number (NULL termination character string)
+
+Response: At the time of a failure
+   A0H  BFH  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+
+
+ 305-3. PROJECTOR INFORMATION REQUEST
+**********************************************************************
+Function:
+This command acquires basic operation states of projector.
+
+Command:
+   00H  BFH  00H  00H  01H  02H  C2H
+
+Response: At the time of a success
+   20H  BFH  01H  xxH  10H  DATA01  ...  DATA16  CKS
+             (*1) (*2)                         (*3)
+
+   Data Portion     Contents
+   -------------------------------------------------------------------
+   DATA01           02H fixed
+   DATA02           Projector Processing Status
+					  00H : Idle
+					  04H : Power On
+					  05H : Cooling
+					  06H : Idle(Error Standby)
+					Other : Not Support
+         Other than above : (nondisclosure)
+                            internal use of code during a state transition period
+   DATA03           Indicate Contents
+					  00H : Picture signal displaying
+					  01H : No Signal
+					  02H : Viewr displaying
+					  03H : Test Pattern displaying
+					  04H : LAN displaying
+					  05H : Test Pattern (User) displaying
+					  10H : Signal selection in progress
+					Other : Not Support
+   DATA04           Select source input type 1
+                      01H : 1
+                      02H : 2
+                      03H : 3
+                      04H : 4
+                      05H : 5
+					Other : Not Support
+   DATA05           Select source input type 2(!)
+                      01H : COMPUTER (RGB)
+                      02H : VIDEO
+                      03H : S-VIDEO
+                      04H : COMPONENT
+                      05H : Reserved
+                      06H : DIGITAL
+                      07H : VIEWER
+                      08H : SLOT1
+                      09H : SLOT2
+                      0AH : SLOT3
+                      0BH : SLOT4
+                      0CH : DIGITAL2
+                      0DH : SCART
+                      10H : AUTO
+                      FFH : Not Source Input
+					Other : Not Support
+   DATA06           Indication signal type
+                    (Effective only when Select source input type 2 is 02H or 03H)
+                      x0H : NTSC3.58
+                      x1H : NTSC4.43
+                      x2H : PAL
+                      x3H : PAL60
+                      x4H : SECAM
+                      x5H : B/W60
+                      x6H : B/W50
+                      x7H : PALNM
+                      x8H : NTSC3.58 LBX
+                      x9H : NTSC3.58 SQZ
+                      xAH : COMPONENT(60Hz)
+                      xBH : COMPONENT(50Hz)
+                      xCH : Un known
+                      xDH : NTSC
+                      xEH : PAL-M
+                      xFH : PAL-N
+                      FFH : Not Video Input
+					Other : Not Support
+   DATA07           Picture Mute
+                      00H : OFF
+                      01H : ON
+   DATA08           Sound Mute
+                      00H : OFF
+                      01H : ON
+   DATA09           On-screen mute
+                      00H : OFF
+                      01H : ON
+   DATA10...DATA16  Reserved
+
+Response: At the time of a failure
+   A0H  BFH  01H  xxH  02H  DATA01  DATA02  CKS
+             (*1) (*2)           (*4)       (*3)
+
+Supplement:
+ (!) On the U300 series, this parameter becomes FFH when non signal.
+
+
+
+
+
+======================================================================
+ 5. Response
+----------------------------------------------------------------------
+* At the time of a success( ACK )
+
+This returns ACK without adding data portion to the command that does
+not request data.
+This returns ACK with adding data to the data portion for the command
+that requests data.
+
+* At the time of a failure( NAK )
+
+This adds a cause of not accepting the command to data portion to
+return it.
+
+(Example) Power On
+
+ Command:
+  02H  00H  FFH  F0H  00H  CKS
+
+ NAK:
+  A2H  00H  01H  20H  02H  DATA01  DATA02  CKS
+
+
+
+======================================================================
+ 6. Table of Response Error Codes
+----------------------------------------------------------------------
+  +------------+------------+--------------------------------------+
+  | DATA01     | DATA02     |                                      |
+  |            | Error      |                                      |
+  | Error types| description| Error contents                       |
+  +------------+------------+--------------------------------------+
+  |    00H     |    00H     | Unknown command                      |
+  |    00H     |    01H     | The current model does not support   |
+  |            |            | this function.                       |
+  |    01H     |    00H     | Unvalid values specified.            |
+  |    01H     |    01H     | Specified terminal is unavailable or |
+  |            |            | cannot be selected                   |
+  |    01H     |    02H     | Selected language is not available.  |
+  |    02H     |    00H     | Available memory reservation error   |
+  |    02H     |    02H     | Operating memory                     |
+  |    02H     |    03H     | Setting not possible                 |
+  |    02H     |    04H     | On Forced on-screen mute mode        |
+  |    02H     |    07H     | -No signal-                          |
+  |    02H     |    08H     | Displaying a test pattern or PC Card |
+  |            |            | Files screen.                        |
+  |    02H     |    0AH     | Memory operation failed              |
+  |    02H     |    0DH     | Power Off inhibited                  |
+  |    02H     |    0EH     | Execution error                      |
+  |    02H     |    0FH     | No operation authority               |
+  |    03H     |    00H     | Specified gain number is wrong       |
+  |    03H     |    01H     | Selected gain is not available.      |
+  |    03H     |    02H     | Adjustment failed                    |
+  +------------+------------+--------------------------------------+
+
