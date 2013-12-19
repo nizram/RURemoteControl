@@ -19,10 +19,11 @@ public class CFSeparator {
      StringTokenizer tokenizer;
 
 
-    public CFSeparator() {
+    public CFSeparator(String configString) {
+    tokenizer = new StringTokenizer(configString,"\n", false);
     }
     
-    public void constructConfig(String configString)
+    public void constructConfig()
     {
      String title = "";
      String type = "";
@@ -40,7 +41,6 @@ public class CFSeparator {
      String vcr = "";
      String doccam = "";
       
-      tokenizer = new StringTokenizer(configString,"\n", false);
       while(tokenizer.hasMoreTokens())
       {
         String token = tokenizer.nextToken();
